@@ -75,6 +75,11 @@ body, html {
     transform: scale(1.1);
 }
 
+.highlight {
+    color: rgb(229, 255, 0); /* 강조를 위한 색상 */
+    font-weight: bold;
+}
+
 #bingo-screen {
     display: flex;
     align-items: center;
