@@ -5,26 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Popkon Bingo - 4x4</title>
     <link rel="stylesheet" href="styles4x4.css">
-    <style>
-        .highlight {
-            color: red; /* 강조를 위한 색상 */
-            font-weight: bold;
-        }
-        .fade-out {
-            animation: fadeOut 1s forwards;
-        }
-        .fade-in {
-            animation: fadeIn 1s forwards;
-        }
-        @keyframes fadeOut {
-            from { opacity: 1; }
-            to { opacity: 0; }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-    </style>
 </head>
 <body class="bingo-bg">
     <div id="bingo-screen">
@@ -39,11 +19,33 @@
             <button id="double-or-nothing" class="popup-button">묻고 더블로 가!</button>
             <button id="retry" class="popup-button">처음으로</button>
         </div>
-        <button id="back-button" class="back-button">돌아가기</button>
+        <button id="go-back-button" class="back-button">돌아가기</button>
     </div>
     <div id="footer">
         <span id="footer-text" class="text-with-border">made by a 죽돌</span>
     </div>
+
+    <audio id="button-sound" src="https://raw.githubusercontent.com/yunrang2/upload/master/Tiny%20Button%20Push%20Sound.mp3"></audio>
+    <audio id="win-sound" src="https://raw.githubusercontent.com/yunrang2/upload/master/Storytelling%20Cartoon%20MusicComedy%2015.mp3"></audio>
+    <audio id="fail-sound" src="https://raw.githubusercontent.com/yunrang2/upload/master/대머리%20깎아라%201.mp3"></audio>
+    <audio id="coin-sound" src="https://raw.githubusercontent.com/yunrang2/upload/master/Coin%201.mp3"></audio>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const buttonSound = document.getElementById('button-sound');
+            
+            const playButtonSound = () => {
+                buttonSound.currentTime = 0; // 사운드 재생 위치를 처음으로 되돌림
+                buttonSound.play();
+            };
+
+            document.getElementById('random-number-button').addEventListener('click', playButtonSound);
+
+            const bingoCells = document.querySelectorAll('.bingo-cell');
+            bingoCells.forEach(cell => {
+                cell.addEventListener('click', playButtonSound);
+            });
+        });
+    </script>
     <script src="bingo4x4.js"></script>
 </body>
 </html>
