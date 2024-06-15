@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popkon Bingo - 4x4</title>
+    <link rel="stylesheet" href="styles4x4.css">
+    <style>
+        .highlight {
+            color: red; /* 강조를 위한 색상 */
+            font-weight: bold;
+        }
+        .fade-out {
+            animation: fadeOut 1s forwards;
+        }
+        .fade-in {
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bingo-bg">
+    <div id="bingo-screen">
+        <div id="remaining-choices" class="text-with-border">남은 선택 횟수: <span id="remaining-count">9</span></div>
+        <div id="sidebar">
+            <div id="random-number" class="random-number-display"></div>
+            <button id="random-number-button" class="random-button">랜덤 번호 생성</button>
+        </div>
+        <div id="bingo-board"></div>
+        <div id="popup" class="popup hidden">
+            <p id="win-text" class="text-with-border"></p>
+            <button id="double-or-nothing" class="popup-button">묻고 더블로 가!</button>
+            <button id="retry" class="popup-button">처음으로</button>
+        </div>
+        <button id="back-button" class="back-button">돌아가기</button>
+    </div>
+    <div id="footer">
+        <span id="footer-text" class="text-with-border">made by a 죽돌</span>
+    </div>
+    <script src="bingo4x4.js"></script>
+</body>
+</html>
