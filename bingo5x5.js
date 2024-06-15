@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 10000); // 10000ms = 10 seconds
 });
 
+// bingo.js
+
 document.addEventListener('DOMContentLoaded', () => {
     const bingoBoard = document.getElementById('bingo-board');
     const randomNumberDisplay = document.getElementById('random-number');
@@ -30,8 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const retryButton = document.getElementById('retry');
     const backButton = document.getElementById('back-button');
 
-    let remainingCount = 10;
-    const numbers = Array.from({ length: 16 }, (_, i) => i + 1);
+    let remainingCount = 13;
+    const numbers = Array.from({ length: 25 }, (_, i) => i + 1);
     let selectedNumbers = [];
     let selectedCells = new Set();
 
@@ -69,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function generateRandomNumber() {
         let randomNum;
         do {
-            randomNum = Math.floor(Math.random() * 16) + 1;
+            randomNum = Math.floor(Math.random() * 25) + 1;
         } while (selectedNumbers.includes(randomNum));
         selectedNumbers.push(randomNum);
         randomNumberDisplay.textContent = randomNum;
@@ -77,22 +79,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function checkWin() {
         const cells = Array.from(bingoBoard.children);
-        const rows = Array.from({ length: 4 }, () => []);
-        const cols = Array.from({ length: 4 }, () => []);
+        const rows = Array.from({ length: 5 }, () => []);
+        const cols = Array.from({ length: 5 }, () => []);
         const diagonals = [[], []];
 
         cells.forEach((cell, i) => {
-            const row = Math.floor(i / 4);
-            const col = i % 4;
+            const row = Math.floor(i / 5);
+            const col = i % 5;
             if (cell.classList.contains('clicked')) {
                 rows[row].push(cell);
                 cols[col].push(cell);
                 if (row === col) diagonals[0].push(cell);
-                if (row + col === 3) diagonals[1].push(cell);
+                if (row + col === 4) diagonals[1].push(cell);
             }
         });
 
-        const winLines = [...rows, ...cols, ...diagonals].filter(line => line.length === 4);
+        const winLines = [...rows, ...cols, ...diagonals].filter(line => line.length === 5);
         return winLines.length; // 반환 값 추가
     }
 
@@ -112,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function resetGame() {
         selectedNumbers = [];
         selectedCells = new Set();
-        remainingCount = 10;
+        remainingCount = 13;
         remainingCountDisplay.textContent = remainingCount;
         randomNumberDisplay.textContent = '';
         popup.classList.add('hidden');
@@ -126,4 +128,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createBingoBoard();
 });
-
