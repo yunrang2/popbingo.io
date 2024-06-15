@@ -224,8 +224,9 @@ body, html {
 
 .popup {
     position: fixed;
-    top: 5%;
+    top: 20%;
     left: 50%;
+    font-size: 3vh;
     transform: translate(-50%, -50%);
     background-color: #fff;
     border: 0.2vh solid #000;
@@ -239,7 +240,7 @@ body, html {
 .popup-button {
     padding: 1vh 2vh;
     margin: 1vh;
-    font-size: 3vh;
+    font-size: 2vh;
     background-color: #1e90ff;
     border: 0.2vh solid #1c86ee;
     border-radius: 1vh;
