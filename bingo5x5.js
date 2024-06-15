@@ -23,105 +23,108 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const bingoBoard = document.getElementById('bingo-board');
-    const remainingCountElem = document.getElementById('remaining-count');
+    const randomNumberDisplay = document.getElementById('random-number');
+    const randomNumberButton = document.getElementById('random-number-button');
+    const remainingCountDisplay = document.getElementById('remaining-count');
     const popup = document.getElementById('popup');
     const winText = document.getElementById('win-text');
     const doubleOrNothingButton = document.getElementById('double-or-nothing');
     const retryButton = document.getElementById('retry');
-    const randomNumberElem = document.getElementById('random-number');
-    const randomNumberButton = document.getElementById('random-number-button');
-    let remainingCount = 13;
-    let generatedNumbers = [];
+    const backButton = document.getElementById('back-button');
 
-    // 초기 빙고판 생성
-    createBingoBoard();
+    let remainingCount = 13;
+    const numbers = Array.from({ length: 25 }, (_, i) => i + 1);
+    let selectedNumbers = [];
+    let selectedCells = new Set();
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+    }
 
     function createBingoBoard() {
-        bingoBoard.innerHTML = ''; // 빙고판 초기화
-        const numbers = Array.from({ length: 25 }, (_, i) => i + 1).sort(() => Math.random() - 0.5);
-        numbers.forEach((number) => {
+        shuffle(numbers);
+        bingoBoard.innerHTML = '';
+        numbers.forEach(num => {
             const cell = document.createElement('div');
             cell.className = 'bingo-cell';
-            cell.textContent = number;
-            cell.addEventListener('click', handleCellClick);
+            cell.textContent = num;
+            cell.addEventListener('click', () => handleCellClick(cell, num));
             bingoBoard.appendChild(cell);
         });
-        remainingCount = 13;
-        remainingCountElem.textContent = remainingCount;
-        generatedNumbers = [];
-        randomNumberElem.textContent = '';
-        popup.classList.add('hidden'); // 팝업 숨기기
     }
 
-    function handleCellClick(event) {
-        const cell = event.target;
-        if (!cell.classList.contains('clicked') && remainingCount > 0) {
+    function handleCellClick(cell, num) {
+        if (!selectedCells.has(cell) && remainingCount > 0) {
+            selectedCells.add(cell);
             cell.classList.add('clicked');
             remainingCount--;
-            remainingCountElem.textContent = remainingCount;
-            checkBingo();
-        }
-        if (remainingCount === 0) {
-            showPopup();
+            remainingCountDisplay.textContent = remainingCount;
+            if (remainingCount === 0) {
+                showPopup();
+            }
         }
     }
 
-    function checkBingo() {
-        const cells = Array.from(bingoBoard.getElementsByClassName('bingo-cell'));
-        const size = 5;
-        let lines = 0;
+    function generateRandomNumber() {
+        let randomNum;
+        do {
+            randomNum = Math.floor(Math.random() * 25) + 1;
+        } while (selectedNumbers.includes(randomNum));
+        selectedNumbers.push(randomNum);
+        randomNumberDisplay.textContent = randomNum;
+    }
 
-        // 가로 줄 체크
-        for (let i = 0; i < size; i++) {
-            if (cells.slice(i * size, i * size + size).every(cell => cell.classList.contains('clicked'))) {
-                lines++;
-                cells.slice(i * size, i * size + size).forEach(cell => cell.style.border = '2px solid red');
+    function checkWin() {
+        const cells = Array.from(bingoBoard.children);
+        const rows = Array.from({ length: 5 }, () => []);
+        const cols = Array.from({ length: 5 }, () => []);
+        const diagonals = [[], []];
+
+        cells.forEach((cell, i) => {
+            const row = Math.floor(i / 5);
+            const col = i % 5;
+            if (cell.classList.contains('clicked')) {
+                rows[row].push(cell);
+                cols[col].push(cell);
+                if (row === col) diagonals[0].push(cell);
+                if (row + col === 4) diagonals[1].push(cell);
             }
-        }
+        });
 
-        // 세로 줄 체크
-        for (let i = 0; i < size; i++) {
-            if (cells.filter((_, index) => index % size === i).every(cell => cell.classList.contains('clicked'))) {
-                lines++;
-                cells.filter((_, index) => index % size === i).forEach(cell => cell.style.border = '2px solid red');
-            }
-        }
-
-        // 대각선 체크
-        if (cells.filter((_, index) => index % (size + 1) === 0).every(cell => cell.classList.contains('clicked'))) {
-            lines++;
-            cells.filter((_, index) => index % (size + 1) === 0).forEach(cell => cell.style.border = '2px solid red');
-        }
-
-        if (cells.filter((_, index) => index % (size - 1) === 0 && index !== 0 && index !== cells.length - 1).every(cell => cell.classList.contains('clicked'))) {
-            lines++;
-            cells.filter((_, index) => index % (size - 1) === 0 && index !== 0 && index !== cells.length - 1).forEach(cell => cell.style.border = '2px solid red');
-        }
-
-        return lines;
+        const winLines = [...rows, ...cols, ...diagonals].filter(line => line.length === 5);
+        return winLines.length; // 반환 값 추가
     }
 
     function showPopup() {
-        const lines = checkBingo();
-        winText.textContent = `${lines} 줄이 완성되었습니다!`;
+        const winLines = checkWin();
+        if (winLines > 0) {
+            winText.innerHTML = `${winLines} 줄이 완성되었습니다!`;
+        } else {
+            winText.innerHTML = '빙고 실패..ㅠㅠ';
+        }
         popup.classList.remove('hidden');
+        bingoBoard.querySelectorAll('.bingo-cell').forEach(cell => {
+            cell.removeEventListener('click', handleCellClick);
+        });
     }
 
-    randomNumberButton.addEventListener('click', () => {
-        let number;
-        do {
-            number = Math.floor(Math.random() * 25) + 1;
-        } while (generatedNumbers.includes(number));
-        generatedNumbers.push(number);
-        randomNumberElem.textContent = number;
-    });
-
-    doubleOrNothingButton.addEventListener('click', () => {
+    function resetGame() {
+        selectedNumbers = [];
+        selectedCells = new Set();
+        remainingCount = 13;
+        remainingCountDisplay.textContent = remainingCount;
+        randomNumberDisplay.textContent = '';
         popup.classList.add('hidden');
         createBingoBoard();
-    });
+    }
 
-    retryButton.addEventListener('click', () => {
-        window.location.href = 'index.html';
-    });
+    randomNumberButton.addEventListener('click', generateRandomNumber);
+    doubleOrNothingButton.addEventListener('click', resetGame);
+    retryButton.addEventListener('click', () => window.location.href = 'index.html'); // 수정: 처음으로 버튼 동작
+    backButton.addEventListener('click', () => window.location.href = 'index.html');
+
+    createBingoBoard();
 });
