@@ -74,6 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } while (selectedNumbers.includes(randomNum));
         selectedNumbers.push(randomNum);
         randomNumberDisplay.textContent = randomNum;
+        
+        const cell = Array.from(bingoBoard.children).find(c => parseInt(c.textContent) === randomNum);
+        if (cell && !selectedCells.has(cell)) {
+            handleCellClick(cell, randomNum);
+        }
     }
 
     function checkWin() {
@@ -122,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     randomNumberButton.addEventListener('click', generateRandomNumber);
     doubleOrNothingButton.addEventListener('click', resetGame);
-    retryButton.addEventListener('click', () => window.location.href = 'index.html'); // 수정: 처음으로 버튼 동작
+    retryButton.addEventListener('click', () => window.location.href = 'index.html');
     backButton.addEventListener('click', () => window.location.href = 'index.html');
 
     createBingoBoard();
