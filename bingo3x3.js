@@ -21,6 +21,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // bingo3x3.js
 
 document.addEventListener('DOMContentLoaded', () => {
+    const buttonSound = document.getElementById('button-sound');
+    const winSound = document.getElementById('win-sound');
+    const failSound = document.getElementById('fail-sound');
+    const coinSound = document.getElementById('coin-sound');
     const bingoBoard = document.getElementById('bingo-board');
     const randomNumberDisplay = document.getElementById('random-number');
     const randomNumberButton = document.getElementById('random-number-button');
@@ -29,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const winText = document.getElementById('win-text');
     const doubleOrNothingButton = document.getElementById('double-or-nothing');
     const retryButton = document.getElementById('retry');
-    const backButton = document.getElementById('back-button');
+    const backButton = document.getElementById('go-back-button');
 
     let remainingCount = 5;
     const numbers = Array.from({ length: 9 }, (_, i) => i + 1);
@@ -61,6 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.classList.add('clicked');
             remainingCount--;
             remainingCountDisplay.textContent = remainingCount;
+            playButtonSound();
             if (remainingCount === 0) {
                 showPopup();
             }
@@ -79,6 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cell && !selectedCells.has(cell)) {
             handleCellClick(cell, randomNum);
         }
+        playButtonSound();
     }
 
     function checkWin() {
@@ -105,8 +111,10 @@ document.addEventListener('DOMContentLoaded', () => {
     function showPopup() {
         const winLines = checkWin();
         if (winLines > 0) {
+            winSound.play();
             winText.innerHTML = `${winLines} 줄이 완성되었습니다!`;
         } else {
+            failSound.play();
             winText.innerHTML = '빙고 실패..ㅠㅠ';
         }
         popup.classList.remove('hidden');
@@ -116,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function resetGame() {
+        stopAllSounds();
         selectedNumbers = [];
         selectedCells = new Set();
         remainingCount = 5;
@@ -125,9 +134,35 @@ document.addEventListener('DOMContentLoaded', () => {
         createBingoBoard();
     }
 
+    function stopAllSounds() {
+        winSound.pause();
+        winSound.currentTime = 0;
+        failSound.pause();
+        failSound.currentTime = 0;
+        coinSound.pause();
+        coinSound.currentTime = 0;
+    }
+
+    function playButtonSound() {
+        buttonSound.currentTime = 0;
+        buttonSound.play();
+    }
+
     randomNumberButton.addEventListener('click', generateRandomNumber);
-    doubleOrNothingButton.addEventListener('click', resetGame);
-    retryButton.addEventListener('click', () => window.location.href = 'index.html');
+    doubleOrNothingButton.addEventListener('click', () => {
+        stopAllSounds();
+        coinSound.play();
+        setTimeout(() => {
+            window.location.href = 'loading.html';
+        }, 300);
+    });
+    retryButton.addEventListener('click', () => {
+        stopAllSounds();
+        buttonSound.play();
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 300);
+    });
     backButton.addEventListener('click', () => window.location.href = 'index.html');
 
     createBingoBoard();
