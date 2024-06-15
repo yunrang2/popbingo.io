@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popkon Bingo - 5x5</title>
+    <link rel="stylesheet" href="styles5x5.css">
+</head>
+<body class="bingo-bg">
+    <div id="bingo-screen">
+        <div id="remaining-choices">남은 선택 횟수: <span id="remaining-count">13</span></div>
+        <div id="sidebar">
+            <div id="random-number" class="random-number-display"></div>
+            <button id="random-number-button" class="random-button">랜덤 번호 생성</button>
+        </div>
+        <div id="bingo-board"></div>
+        <div id="popup" class="popup hidden">
+            <p id="win-text"></p>
+            <button id="double-or-nothing" class="popup-button">묻고 더블로 가!</button>
+            <button id="retry" class="popup-button">처음으로</button>
+        </div>
+        <button id="back-button" class="back-button" onclick="window.location.href='index.html'">돌아가기</button>
+    </div>
+    <div id="footer">
+        <span id="footer-text">made by a 죽돌</span>
+    </div>
+    <script src="bingo5x5.js"></script>
+</body>
+</html>
