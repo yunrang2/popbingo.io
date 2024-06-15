@@ -60,7 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
             cell.classList.add('clicked');
             remainingCount--;
             remainingCountDisplay.textContent = remainingCount;
-            checkWin();
             if (remainingCount === 0) {
                 showPopup();
             }
@@ -94,14 +93,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         const winLines = [...rows, ...cols, ...diagonals].filter(line => line.length === 4);
-        if (winLines.length > 0) {
-            winText.innerHTML = `${winLines.length} 줄이 완성되었습니다!`;
-        }
+        return winLines.length; // 반환 값 추가
     }
 
     function showPopup() {
-        checkWin();
+        const winLines = checkWin();
+        if (winLines > 0) {
+            winText.innerHTML = `${winLines} 줄이 완성되었습니다!`;
+        } else {
+            winText.innerHTML = '빙고 실패..ㅠㅠ';
+        }
         popup.classList.remove('hidden');
+        bingoBoard.querySelectorAll('.bingo-cell').forEach(cell => {
+            cell.removeEventListener('click', handleCellClick);
+        });
     }
 
     function resetGame() {
@@ -116,8 +121,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     randomNumberButton.addEventListener('click', generateRandomNumber);
     doubleOrNothingButton.addEventListener('click', resetGame);
-    retryButton.addEventListener('click', () => window.location.href = 'index.html');
+    retryButton.addEventListener('click', () => window.location.href = 'index.html'); // 수정: 처음으로 버튼 동작
     backButton.addEventListener('click', () => window.location.href = 'index.html');
 
     createBingoBoard();
 });
+
