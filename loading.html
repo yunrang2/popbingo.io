@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading...</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .loading-text {
+            font-size: 2em;
+            font-weight: bold;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-text">로딩 중...</div>
+
+    <audio id="ready-sound" src="https://raw.githubusercontent.com/yunrang2/upload/master/준비됐나요%201.mp3"></audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const readySound = document.getElementById('ready-sound');
+            const navigateTo = sessionStorage.getItem('navigateTo');
+            
+            if (navigateTo) {
+                readySound.play();
+                readySound.addEventListener('ended', () => {
+                    window.location.href = navigateTo;
+                });
+            } else {
+                window.location.href = 'index.html';
+            }
+        });
+    </script>
+</body>
+</html>
