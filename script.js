@@ -22,16 +22,25 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const buttonContainer = document.getElementById('button-container');
+    const coinSound = document.getElementById('coin-sound');
+    
+    const playCoinAndNavigate = (url) => {
+        coinSound.play();
+        setTimeout(() => {
+            sessionStorage.setItem('navigateTo', url);
+            window.location.href = 'loading.html';
+        }, 300); // 소리가 끝난 후 페이지 이동을 위해 약간의 딜레이를 줌
+    };
 
-    buttonContainer.addEventListener('click', (event) => {
-        if (event.target.classList.contains('size-button')) {
-            const size = event.target.dataset.size;
-            if (size === '5') {
-                window.location.href = 'bingo5x5.html';
-            } else if (size === '3') {
-                window.location.href = 'bingo3x3.html';
-            }
-        }
+    document.getElementById('button-3x3').addEventListener('click', () => {
+        playCoinAndNavigate('bingo3x3.html');
+    });
+
+    document.getElementById('button-4x4').addEventListener('click', () => {
+        playCoinAndNavigate('bingo4x4.html');
+    });
+
+    document.getElementById('button-5x5').addEventListener('click', () => {
+        playCoinAndNavigate('bingo5x5.html');
     });
 });
