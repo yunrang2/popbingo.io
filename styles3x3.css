@@ -144,8 +144,8 @@ body, html {
 }
 
 .bingo-cell {
-    width: 20vw;
-    height: 20vw;
+    width: 15vw;
+    height: 15vw;
     display: flex;
     align-items: center;
     justify-content: center;
