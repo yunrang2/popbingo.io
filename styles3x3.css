@@ -190,7 +190,7 @@ body, html {
 
 .bingo-cell.clicked::after {
     content: '○';
-    font-size: 10vh;
+    font-size: 15vh;
     font-weight: bold;
     color: red;
     position: absolute;
