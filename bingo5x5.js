@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const failSound = document.getElementById('fail-sound');
     const coinSound = document.getElementById('coin-sound');
 
-    let remainingCount = 13;
+    let remainingCount = 11;
     const numbers = Array.from({ length: 25 }, (_, i) => i + 1);
     let selectedNumbers = [];
     let selectedCells = new Set();
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
         stopAllSounds();
         selectedNumbers = [];
         selectedCells = new Set();
-        remainingCount = 13;
+        remainingCount = 11;
         remainingCountDisplay.textContent = remainingCount;
         randomNumberDisplay.textContent = '';
         popup.classList.add('hidden');
